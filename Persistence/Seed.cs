@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Persistence
