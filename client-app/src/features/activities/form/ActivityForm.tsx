@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, SyntheticEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/activity';
 import {v4 as uuid} from 'uuid';
@@ -8,14 +8,20 @@ interface IProps {
   activity: IActivity;
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
-  deleteActivity: (id: string) => void;
+  deleteActivity: (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => void;
+  submitting: boolean;
+  
 }
 
 const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormStart,
   createActivity,
-  editActivity
+  editActivity,
+  submitting
 }) => {
   const initializeForm = () => {
     if (initialFormStart) {
@@ -95,7 +101,7 @@ const ActivityForm: React.FC<IProps> = ({
           onChange={handleInputChange}
           name={'venue'}
         />
-        <Button floated='right' positive type='submit' content='Submit' />
+        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
         <Button
           floated='right'
           type='button'
