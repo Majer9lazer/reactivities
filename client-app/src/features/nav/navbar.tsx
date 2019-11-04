@@ -21,7 +21,7 @@ const NavBar = () => {
           <Button
             positive
             content='Create Activity'
-            onClick={() => activityStore.openCreateForm}
+            onClick={() => activityStore.openCreateForm()}
           ></Button>
         </Menu.Item>
       </Container>
