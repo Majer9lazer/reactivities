@@ -9,7 +9,8 @@ const ActivityList = () => {
     activitiesByDate,
     selectActivity,
     submitting,
-    target
+    target,
+    deleteActivity
   } = activityStore;
 
   return (
@@ -38,7 +39,7 @@ const ActivityList = () => {
                 <Button
                   name={activity.id}
                   loading={target === activity.id && submitting}
-                  onClick={e => activityStore.deleteActivity(e, activity.id)} //deleteActivity(e, activity.id)
+                  onClick={e => deleteActivity(e, activity.id)}
                   floated='right'
                   content='Delete'
                   color='red'
