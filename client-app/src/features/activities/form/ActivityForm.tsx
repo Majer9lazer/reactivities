@@ -1,40 +1,49 @@
-import React, { useState, FormEvent, useContext } from 'react';
+import React, { useState, FormEvent, useContext, useEffect } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/activity';
 import { v4 as uuid } from 'uuid';
 import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
+import { RouteComponentProps } from 'react-router';
 
-interface IProps {
-  activity: IActivity;
+interface DetailParams {
+  id: string;
 }
 
-const ActivityForm: React.FC<IProps> = ({ activity: initialFormStart }) => {
+const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
+  match
+}) => {
   const activityStore = useContext(ActivityStore);
   const {
     createActivity,
     editActivity,
     submitting,
-    cancelFormOpen
+    cancelFormOpen,
+    activity: initialFormState,
+    loadActivity,
+    clearActivity
   } = activityStore;
 
-  const initializeForm = () => {
-    if (initialFormStart) {
-      return initialFormStart;
-    } else {
-      return {
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: '',
-        city: '',
-        venue: ''
-      };
+  useEffect(() => {
+    if (match.params.id) {
+      loadActivity(match.params.id).then(
+        () => initialFormState && setActivity(initialFormState)
+      );
     }
-  };
+    return () => {
+      clearActivity();
+    };
+  }, [loadActivity, clearActivity, match.params.id, initialFormState]);
 
-  const [activity, setActivity] = useState<IActivity>(initializeForm);
+  const [activity, setActivity] = useState<IActivity>({
+    id: '',
+    title: '',
+    category: '',
+    description: '',
+    date: '',
+    city: '',
+    venue: ''
+  });
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
@@ -114,4 +123,4 @@ const ActivityForm: React.FC<IProps> = ({ activity: initialFormStart }) => {
   );
 };
 
-export default observer (ActivityForm);
+export default observer(ActivityForm);
